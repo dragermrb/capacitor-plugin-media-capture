@@ -1,10 +1,37 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { MediaCapturePlugin } from './definitions';
+import type {
+  CaptureAudioOptions,
+  CaptureImageOptions,
+  CaptureVideoOptions,
+  FormatDataOptions,
+  MediaCapturePlugin,
+  MediaFileData,
+  MediaFileResult,
+} from './definitions';
 
 export class MediaCaptureWeb extends WebPlugin implements MediaCapturePlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+  captureAudio(options: CaptureAudioOptions): Promise<MediaFileResult> {
+    console.log('captureAudio', options);
+
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  captureImage(options: CaptureImageOptions): Promise<MediaFileResult> {
+    console.log('captureImage', options);
+
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  captureVideo(options: CaptureVideoOptions): Promise<MediaFileResult> {
+    console.log('captureVideo', options);
+
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  getFormatData(options: FormatDataOptions): Promise<MediaFileData> {
+    console.log('getFormatData', options);
+
+    throw this.unimplemented('Not implemented on web.');
   }
 }
