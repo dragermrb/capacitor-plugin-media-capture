@@ -46,6 +46,7 @@ public class MediaCapturePlugin extends Plugin {
     private static final String VIDEO_MP4 = "video/mp4";
     private static final String AUDIO_3GPP = "audio/3gpp";
     private static final String[] AUDIO_TYPES = new String[]{"audio/3gpp", "audio/aac", "audio/amr", "audio/wav"};
+
     // Message constants
     private static final String PERMISSION_DENIED_ERROR_CAMERA = "User denied access to camera";
     private static final String FILE_SAVE_ERROR = "Unable to create file on disk";
@@ -162,7 +163,7 @@ public class MediaCapturePlugin extends Plugin {
     }
 
     /**
-     * Creates a JSONObject that represents a File from the Uri
+     * Creates a JSObject that represents a File from the Uri
      *
      * @param file the File of the audio/image/video
      * @return a JSObject that represents a File
@@ -178,39 +179,6 @@ public class MediaCapturePlugin extends Plugin {
         ret.put("path", uri);
         ret.put("type", mimeType);
         ret.put("size", file.length());
-
-        return ret;
-    }
-
-    /**
-     * Creates a JSONObject that represents a File from the Uri
-     *
-     * @param uri the Uri of the audio/image/video
-     * @return a JSObject that represents a File
-     */
-    private JSObject createMediaFile(Uri uri) {
-        Context context = getBridge().getActivity().getApplicationContext();
-        Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-
-        int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
-        if (!cursor.moveToFirst()) {
-            return null;
-        }
-
-        String name = cursor.getString(nameIndex);
-        Long size = cursor.getLong(sizeIndex);
-        String mimeType = context.getContentResolver().getType(uri);
-
-        JSObject ret = new JSObject();
-
-        ret.put("name", name);
-        ret.put("path", uri);
-        ret.put("type", mimeType);
-        ret.put("size", size);
 
         return ret;
     }
