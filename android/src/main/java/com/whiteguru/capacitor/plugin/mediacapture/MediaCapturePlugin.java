@@ -70,8 +70,7 @@ public class MediaCapturePlugin extends Plugin {
     public void captureImage(PluginCall call) {
         int limit = call.getInt("limit", 1);
 
-        call.reject("unimplemented");
-        return;
+        call.unimplemented();
     }
 
     @PluginMethod
@@ -219,13 +218,11 @@ public class MediaCapturePlugin extends Plugin {
     }
 
     private File createTempFile(Activity activity, String extension) throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
         String fileName = extension + "_" + timeStamp + "_";
-        File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getContext().getCacheDir();
 
-        File file = File.createTempFile(fileName, "." + extension, storageDir);
-
-        return file;
+      return File.createTempFile(fileName, "." + extension, storageDir);
     }
 
     /**
