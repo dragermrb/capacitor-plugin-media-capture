@@ -7,13 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
 import androidx.activity.result.ActivityResult;
-import androidx.core.content.FileProvider;
+import androidx.annotation.NonNull;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -36,7 +35,7 @@ import java.util.Locale;
 
 @CapacitorPlugin(
         name = "MediaCapture",
-        permissions = {@Permission(strings = {Manifest.permission.CAMERA}, alias = MediaCapturePlugin.CAMERA)}
+        permissions = {@Permission(strings = {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, alias = MediaCapturePlugin.CAMERA)}
 )
 public class MediaCapturePlugin extends Plugin {
 
@@ -79,11 +78,26 @@ public class MediaCapturePlugin extends Plugin {
         float quality = call.getFloat("quality", 1.0F);
 
         if (checkCameraPermissions(call)) {
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+            Intent intent = new Intent(getActivity(), MediaCapturePluginActivity.class);
+
+            try {
+                File videoFile = this.createTempFile("mp4");
+
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, videoFile);
+                intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, duration);
+                intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, quality);
+            } catch (Exception ex) {
+                call.reject(FILE_SAVE_ERROR, ex);
+                return;
+            }
+
+            startActivityForResult(call, intent, "captureResult");
+
+            /*Intent intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
 
             try {
                 String appId = getAppId();
-                File videoFile = this.createTempFile(getActivity(), "mp4");
+                File videoFile = this.createTempFile("mp4");
                 fileSavePath = videoFile.getAbsolutePath();
                 Uri imageFileUri = FileProvider.getUriForFile(getActivity(), appId + ".fileprovider", videoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
@@ -94,7 +108,7 @@ public class MediaCapturePlugin extends Plugin {
                 return;
             }
 
-            startActivityForResult(call, intent, "captureResult");
+            startActivityForResult(call, intent, "captureResult");*/
         }
     }
 
@@ -116,7 +130,7 @@ public class MediaCapturePlugin extends Plugin {
         // If the mimeType isn't set the rest will fail
         // so let's see if we can determine it.
         if (mimeType == null || mimeType.equals("") || "null".equals(mimeType)) {
-            mimeType = getMimeType(fileUrl);
+            mimeType = getMimeTypeFromUri(fileUrl);
         }
 
         if (Arrays.asList(AUDIO_TYPES).contains(mimeType)) {
@@ -135,27 +149,15 @@ public class MediaCapturePlugin extends Plugin {
             return;
         }
 
-        if (fileSavePath == null) {
-            call.reject(MEDIA_PROCESS_NO_FILE_ERROR);
-            return;
-        }
+        Intent resultIntent = result.getData();
 
-        Intent data = result.getData();
-        Context context = getBridge().getActivity().getApplicationContext();
-
-        JSArray files = new JSArray();
-        if (result.getResultCode() == Activity.RESULT_OK && data != null) {
-            //Uri uri = data.getData();
-            //Uri uri = Uri.fromFile(new File(fileSavePath));
-
+        if (result.getResultCode() == Activity.RESULT_OK && resultIntent != null && resultIntent.getData() != null) {
+            Uri resultUri = resultIntent.getData();
             JSObject ret = new JSObject();
-            JSObject mediaFile = this.createMediaFile(new File(fileSavePath));
-            if (mediaFile != null) {
-                ret.put("file", mediaFile);
-                call.resolve(ret);
-            } else {
-                call.reject("cant create mediaFile: " + fileSavePath);
-            }
+
+            ret.put("file", this.createMediaFile(resultUri));
+
+            call.resolve(ret);
         } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
             call.reject("canceled");
         }
@@ -164,20 +166,16 @@ public class MediaCapturePlugin extends Plugin {
     /**
      * Creates a JSObject that represents a File from the Uri
      *
-     * @param file the File of the audio/image/video
+     * @param uri the Uri of the audio/image/video
      * @return a JSObject that represents a File
      */
-    private JSObject createMediaFile(File file) {
-        Context context = getBridge().getActivity().getApplicationContext();
-        Uri uri = Uri.fromFile(file);
-        String mimeType = context.getContentResolver().getType(uri);
-
+    private JSObject createMediaFile(Uri uri) {
         JSObject ret = new JSObject();
 
-        ret.put("name", file.getName());
+        ret.put("name", uri.getLastPathSegment());
         ret.put("path", uri);
-        ret.put("type", mimeType);
-        ret.put("size", file.length());
+        ret.put("type", getMimeTypeFromUri(uri));
+        ret.put("size", getFileSizeFromUri(uri));
 
         return ret;
     }
@@ -217,7 +215,7 @@ public class MediaCapturePlugin extends Plugin {
         }
     }
 
-    private File createTempFile(Activity activity, String extension) throws IOException {
+    private File createTempFile(String extension) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
         String fileName = extension + "_" + timeStamp + "_";
         File storageDir = getContext().getCacheDir();
@@ -256,16 +254,8 @@ public class MediaCapturePlugin extends Plugin {
      * @param uri Uri the URI string of the data
      * @return the mime type of the specified data
      */
-    private String getMimeType(Uri uri) {
-        String mimeType = null;
-        if ("content".equals(uri.getScheme())) {
-            Context context = getBridge().getActivity().getApplicationContext();
-            mimeType = context.getContentResolver().getType(uri);
-        } else {
-            mimeType = getMimeTypeForExtension(uri.getPath());
-        }
-
-        return mimeType;
+    private String getMimeTypeFromUri(Uri uri) {
+        return getContext().getContentResolver().getType(uri);
     }
 
     public String getMimeTypeForExtension(String path) {
@@ -280,5 +270,15 @@ public class MediaCapturePlugin extends Plugin {
             return "audio/3gpp";
         }
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+    }
+
+    /**
+     * A helper function to retrieve the captured file size.
+     */
+    @NonNull
+    private Long getFileSizeFromUri(Uri contentUri) {
+        File file = new File(contentUri.getPath());
+
+        return file.length();
     }
 }
