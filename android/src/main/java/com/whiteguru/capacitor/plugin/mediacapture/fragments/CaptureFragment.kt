@@ -19,7 +19,7 @@ package com.whiteguru.capacitor.plugin.mediacapture.fragments
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
-import android.provider.MediaStore
+import android.provider.MediaStore.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,14 +51,15 @@ import java.io.File
 
 
 class CaptureFragment : Fragment() {
-    private var limitInSeconds = 0
     private var outputFile: File? = null
+    private var limitInSeconds = 0
+    private var quality: Quality = Quality.SD
+    private var sizeLimit = 0L
 
     // UI with ViewBinding
     private var _captureViewBinding: FragmentCaptureBinding? = null
     private val captureViewBinding get() = _captureViewBinding!!
-    private val timeleftLive = MutableLiveData<String>()
-
+    private val timeLeftLive = MutableLiveData<String>()
 
     /** Host's navigation controller */
     private val navController: NavController by lazy {
@@ -92,10 +93,11 @@ class CaptureFragment : Fragment() {
 
         val extras = requireActivity().intent.extras
         if (extras != null) {
-            val file = extras.getSerializable(MediaStore.EXTRA_OUTPUT) as File
-            val videoQuality = extras.getFloat(MediaStore.EXTRA_VIDEO_QUALITY, 1.0F)
+            quality = getQualityFromString(extras.getString(EXTRA_VIDEO_QUALITY, "sd"))
+            limitInSeconds = extras.getInt(EXTRA_DURATION_LIMIT, 0)
+            sizeLimit = extras.getLong(EXTRA_SIZE_LIMIT, 0L)
 
-            limitInSeconds = extras.getInt(MediaStore.EXTRA_DURATION_LIMIT, 0)
+            val file = extras.getSerializable(EXTRA_OUTPUT) as File
             if (file != null) {
                 outputFile = file
             }
@@ -122,7 +124,6 @@ class CaptureFragment : Fragment() {
         super.onDestroyView()
     }
 
-    // main cameraX capture functions
     /**
      *   Always bind preview + video capture use case combinations in this sample
      *   (VideoCapture can work on its own). The function should always execute on
@@ -135,8 +136,10 @@ class CaptureFragment : Fragment() {
 
         // create the user required QualitySelector (video resolution): we know this is
         // supported, a valid qualitySelector will be created.
-        val quality = cameraCapabilities[cameraIndex].qualities[qualityIndex]
-        val qualitySelector = QualitySelector.from(quality)
+        val qualitySelector = QualitySelector.from(
+            quality,
+            FallbackStrategy.lowerQualityOrHigherThan(quality)
+        )
 
         captureViewBinding.previewView.updateLayoutParams<ConstraintLayout.LayoutParams> {
             val orientation = this@CaptureFragment.resources.configuration.orientation
@@ -187,21 +190,8 @@ class CaptureFragment : Fragment() {
      */
     @SuppressLint("MissingPermission")
     private fun startRecording() {
-        // create MediaStoreOutputOptions for our recorder: resulting our recording!
-        /*val name = "CameraX-recording-" +
-            SimpleDateFormat(FILENAME_FORMAT, Locale.US)
-                .format(System.currentTimeMillis()) + ".mp4"
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Video.Media.DISPLAY_NAME, name)
-        }
-        val mediaStoreOutput = MediaStoreOutputOptions.Builder(
-            requireActivity().contentResolver,
-            MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-            .setContentValues(contentValues)
-            .build()*/
-
         val fileOutput = FileOutputOptions.Builder(outputFile!!)
-            .setFileSizeLimit(10 * 1024 * 1024)
+            .apply { if (sizeLimit > 0) setFileSizeLimit(sizeLimit) }
             .build()
 
         // configure Recorder and Start recording to the mediaStoreOutput.
@@ -377,12 +367,12 @@ class CaptureFragment : Fragment() {
             isEnabled = false
         }
 
-        timeleftLive.observe(viewLifecycleOwner) {
+        timeLeftLive.observe(viewLifecycleOwner) {
             captureViewBinding.timeLeft.apply {
                 post { text = it }
             }
         }
-        timeleftLive.value = ""
+        timeLeftLive.value = ""
     }
 
     /**
@@ -421,13 +411,13 @@ class CaptureFragment : Fragment() {
         Log.i(TAG, "recording event: $text")
 
         if (limitInSeconds > 0) {
-            timeleftLive.value = "${limitInSeconds - time}\""
+            timeLeftLive.value = "${limitInSeconds - time}\""
 
             if (time >= limitInSeconds) {
                 stopRecording();
             }
         } else {
-            timeleftLive.value = "${time}\""
+            timeLeftLive.value = "${time}\""
         }
     }
 
@@ -510,6 +500,15 @@ class CaptureFragment : Fragment() {
         //captureViewBinding.audioSelection.isChecked = audioEnabled
     }
 
+    private fun getQualityFromString(qualityValue: String): Quality {
+        return when (qualityValue) {
+            "uhd" -> Quality.UHD
+            "fhd" -> Quality.FHD
+            "hd" -> Quality.HD
+            "sd" -> Quality.SD
+            else -> Quality.SD
+        }
+    }
 
     companion object {
         // default Quality selection if no input from UI
