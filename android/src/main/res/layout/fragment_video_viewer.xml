@@ -28,40 +28,44 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="9:16"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/viewer_vertical_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="199dp" />
 
     <ImageButton
         android:id="@+id/ok_button"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:layout_marginStart="48dp"
+        android:layout_marginBottom="104dp"
         android:background="@drawable/ic_ok"
         android:contentDescription="@string/stop"
         android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="@+id/viewer_vertical_guideline"
-        app:layout_constraintTop_toTopOf="@+id/cancel_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ImageContrastCheck" />
 
     <ImageButton
         android:id="@+id/cancel_button"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="104dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="48dp"
         android:background="@drawable/ic_cancel"
-        android:contentDescription="@string/capture"
+        android:contentDescription="@string/cancel"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/viewer_vertical_guideline"
+        app:layout_constraintBottom_toBottomOf="@+id/ok_button"
+        app:layout_constraintStart_toEndOf="@+id/ok_button"
+        tools:ignore="ImageContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/ic_back"
+        android:contentDescription="@string/back"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/ok_button"
+        app:layout_constraintEnd_toStartOf="@+id/ok_button"
         tools:ignore="ImageContrastCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -95,6 +95,14 @@ class VideoViewerFragment : androidx.fragment.app.Fragment() {
             }
         }
 
+        binding.backButton.apply {
+            setOnClickListener {
+                deleteFile(args.uri)
+
+                navController.popBackStack()
+            }
+        }
+
         showVideo(args.uri)
     }
 
