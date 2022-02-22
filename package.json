@@ -1,7 +1,7 @@
 {
-  "name": "capacitor-plugin-media-capture",
-  "version": "0.0.1",
-  "description": "Capacitor plugin to capture audio and video",
+  "name": "@whiteguru/capacitor-plugin-media-capture",
+  "version": "1.0.0",
+  "description": "Capacitor plugin to capture video",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorPluginMediaCapture.podspec"
+    "WhiteguruCapacitorPluginMediaCapture.podspec"
   ],
   "author": "Manuel Rodríguez",
   "license": "MIT",
