@@ -1,11 +1,11 @@
-# capacitor-plugin-media-capture
+# @whiteguru/capacitor-plugin-media-capture
 
 Capacitor plugin to capture audio and video
 
 ## Install
 
 ```bash
-npm install capacitor-plugin-media-capture
+npm install @whiteguru/capacitor-plugin-media-capture
 npx cap sync
 ```
 
@@ -32,8 +32,8 @@ This plugin needs `compileSdkVersion = 31` variable (defined in your app's `vari
 
 <docgen-index>
 
-* [`captureVideo(...)`](#capturevideo)
-* [Interfaces](#interfaces)
+- [`captureVideo(...)`](#capturevideo)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -52,11 +52,9 @@ captureVideo(options: CaptureVideoOptions) => any
 
 **Returns:** <code>any</code>
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### CaptureVideoOptions
 
@@ -66,13 +64,11 @@ captureVideo(options: CaptureVideoOptions) => any
 | **`quality`**   | <code>"uhd" \| "fhd" \| "hd" \| "sd"</code> | Quality of the video. `uhd` for 4K ultra HD video size (2160p). `fhd` for full HD video size (1080p). `hd` for HD video size (720p). `sd` for SD video size (480p). |
 | **`sizeLimit`** | <code>number</code>                         | Max file size in bytes.                                                                                                                                             |
 
-
 #### MediaFileResult
 
 | Prop       | Type                                            |
 | ---------- | ----------------------------------------------- |
 | **`file`** | <code><a href="#mediafile">MediaFile</a></code> |
-
 
 #### MediaFile
 
