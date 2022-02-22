@@ -1,46 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2021 The Android Open Source Project
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     https://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:tint="@color/selector_ic"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="46.0"
-    android:viewportHeight="46.0"
-    tools:ignore="VectorRaster">
-    <path android:fillAlpha="0" android:fillColor="#D8D8D8"
-        android:fillType="evenOdd" android:pathData="M-4,-4h54v54h-54z"
-        android:strokeColor="#00000000" android:strokeWidth="1"/>
-    <path android:fillColor="#00000000" android:fillType="evenOdd"
-        android:pathData="M23,23m-6.6,0a6.6,6.6 0,1 1,13.2 0a6.6,6.6 0,1 1,-13.2 0"
-        android:strokeColor="#FFFFFF" android:strokeWidth="2.8"/>
-    <path android:fillColor="#FEFEFE" android:fillType="evenOdd"
-        android:pathData="M42.923,34.5C38.9462,41.3747 31.5132,46 23,46C10.2975,46 0,35.7025 0,23L2.8,23C2.8,34.1562 11.8438,43.2 23,43.2C29.8831,43.2 35.9621,39.7574 39.6091,34.5L42.923,34.5ZM46,23L43.2,23C43.2,11.8438 34.1562,2.8 23,2.8C16.1169,2.8 10.0379,6.2426 6.3909,11.5L3.077,11.5C7.0538,4.6253 14.4868,0 23,0C35.7025,0 46,10.2975 46,23Z"
-        android:strokeColor="#00000000" android:strokeWidth="1"/>
-    <path android:fillColor="#FEFEFE" android:fillType="evenOdd"
-        android:pathData="M3,9.2h10v2.8h-10z"
-        android:strokeColor="#00000000" android:strokeWidth="1"/>
-    <path android:fillColor="#FEFEFE" android:fillType="evenOdd"
-        android:pathData="M33,34h10v2.8h-10z"
-        android:strokeColor="#00000000" android:strokeWidth="1"/>
-    <path android:fillColor="#FEFEFE" android:fillType="evenOdd"
-        android:pathData="M5.8,2l-0,10l-2.8,0l-0,-10z"
-        android:strokeColor="#00000000" android:strokeWidth="1"/>
-    <path android:fillColor="#FEFEFE" android:fillType="evenOdd"
-        android:pathData="M43,34l-0,10l-2.8,0l-0,-10z"
-        android:strokeColor="#00000000" android:strokeWidth="1"/>
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt"
+    android:viewportWidth="74"
+    android:viewportHeight="74"
+    android:width="74dp"
+    android:height="74dp">
+
+    <path
+        android:pathData="M37 4.89999C54.7278 4.89999 69.1 19.2731 69.1 37C69.1 54.7279 54.7279 69.1 37 69.1C19.2721 69.1 4.89999 54.7279 4.89999 37C4.89999 19.2731 19.2722 4.89999 37 4.89999Z"
+        android:strokeColor="#FFFFFF"
+        android:fillColor="#4DFFFFFF"
+        android:strokeWidth="1" />
+
+    <path
+        android:pathData="M54.726717 39.922377V36.966844A17.760891 17.760891 0 0 0 23.74352 25.168732m-4.470237 8.897998v2.955531a17.773822 17.773821 0 0 0 31.018284 11.790714"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M14.809514 37.000005l4.357558 -4.359415 4.557057 4.359415m35.466357 0l-4.35755 4.359404 -4.55706 -4.359404"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
 </vector>

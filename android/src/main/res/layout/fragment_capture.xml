@@ -34,13 +34,6 @@
 
     </androidx.camera.view.PreviewView>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
-
     <ImageButton
         android:id="@+id/capture_button"
         android:layout_width="72dp"
@@ -49,24 +42,36 @@
         android:background="@drawable/ic_start"
         android:contentDescription="@string/capture"
         android:scaleType="fitCenter"
-        android:translationX="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/vertical_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ImageContrastCheck" />
 
     <ImageButton
         android:id="@+id/stop_button"
-        android:layout_width="72dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="32dp"
         android:background="@drawable/ic_stop"
-        android:contentDescription="@string/stop"
+        android:contentDescription="@string/Switch"
         android:scaleType="fitCenter"
-        android:translationX="48dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/capture_button"
         app:layout_constraintStart_toEndOf="@+id/capture_button"
-        app:layout_constraintTop_toTopOf="@+id/capture_button"
+        tools:ignore="ImageContrastCheck" />
+
+
+    <ImageButton
+        android:id="@+id/camera_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/ic_switch"
+        android:contentDescription="@string/stop"
+        android:scaleType="fitCenter"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/capture_button"
+        app:layout_constraintEnd_toStartOf="@+id/capture_button"
         tools:ignore="ImageContrastCheck" />
 
     <TextView
@@ -74,7 +79,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="30 s"
         android:textColor="@color/txWhite"
         android:textSize="16sp"
         android:textStyle="bold"

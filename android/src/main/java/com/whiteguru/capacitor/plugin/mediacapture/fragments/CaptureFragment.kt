@@ -81,7 +81,6 @@ class CaptureFragment : Fragment() {
     }
 
     private var cameraIndex = 0
-    private var qualityIndex = DEFAULT_QUALITY_IDX
     private var audioEnabled = true
 
     private val mainThreadExecutor by lazy { ContextCompat.getMainExecutor(requireContext()) }
@@ -95,7 +94,7 @@ class CaptureFragment : Fragment() {
         if (extras != null) {
             quality = getQualityFromString(extras.getString(EXTRA_VIDEO_QUALITY, "sd"))
             limitInSeconds = extras.getInt(EXTRA_DURATION_LIMIT, 0)
-            sizeLimit = extras.getLong(EXTRA_SIZE_LIMIT, 0L)
+            sizeLimit = extras.getLong(EXTRA_SIZE_LIMIT, 10L * 1024 * 1024)
 
             val file = extras.getSerializable(EXTRA_OUTPUT) as File
             if (file != null) {
@@ -136,6 +135,8 @@ class CaptureFragment : Fragment() {
 
         // create the user required QualitySelector (video resolution): we know this is
         // supported, a valid qualitySelector will be created.
+        //val quality = cameraCapabilities[cameraIndex].qualities[qualityIndex]
+        //val qualitySelector = QualitySelector.from(quality)
         val qualitySelector = QualitySelector.from(
             quality,
             FallbackStrategy.lowerQualityOrHigherThan(quality)
@@ -314,25 +315,20 @@ class CaptureFragment : Fragment() {
      */
     @SuppressLint("ClickableViewAccessibility", "MissingPermission")
     private fun initializeUI() {
-        /*captureViewBinding.cameraButton.apply {
+        captureViewBinding.cameraButton.apply {
             setOnClickListener {
                 cameraIndex = (cameraIndex + 1) % cameraCapabilities.size
+
                 // camera device change is in effect instantly:
-                //   - reset quality selection
                 //   - restart preview
-                qualityIndex = DEFAULT_QUALITY_IDX
-                initializeQualitySectionsUI()
+
                 enableUI(false)
                 viewLifecycleOwner.lifecycleScope.launch {
                     bindCaptureUsecase()
                 }
             }
             isEnabled = false
-        }*/
-
-        /*if (limitInSeconds == 0) {
-            captureViewBinding.timeLeft.visibility = View.INVISIBLE
-        }*/
+        }
 
         // React to user touching the capture button
         captureViewBinding.captureButton.apply {
@@ -428,7 +424,7 @@ class CaptureFragment : Fragment() {
      */
     private fun enableUI(enable: Boolean) {
         arrayOf(
-            //captureViewBinding.cameraButton,
+            captureViewBinding.cameraButton,
             captureViewBinding.captureButton,
             captureViewBinding.stopButton,
         ).forEach {
@@ -436,7 +432,7 @@ class CaptureFragment : Fragment() {
         }
         // disable the camera button if no device to switch
         if (cameraCapabilities.size <= 1) {
-            //captureViewBinding.cameraButton.isEnabled = false
+            captureViewBinding.cameraButton.isEnabled = false
         }
     }
 
@@ -449,21 +445,13 @@ class CaptureFragment : Fragment() {
         captureViewBinding.let {
             when (state) {
                 UiState.IDLE -> {
-                    //it.captureButton.setImageResource(R.drawable.ic_start)
                     it.captureButton.visibility = View.VISIBLE
                     it.stopButton.visibility = View.INVISIBLE
-
-                    //it.cameraButton.visibility= View.VISIBLE
-                    //it.audioSelection.visibility = View.VISIBLE
-                    //it.qualitySelection.visibility=View.VISIBLE
+                    it.cameraButton.visibility= View.VISIBLE
                 }
                 UiState.RECORDING -> {
-                    //it.cameraButton.visibility = View.INVISIBLE
-                    //it.audioSelection.visibility = View.INVISIBLE
-                    //it.qualitySelection.visibility = View.INVISIBLE
+                    it.cameraButton.visibility = View.INVISIBLE
 
-                    //it.captureButton.setImageResource(R.drawable.ic_pause)
-                    //it.captureButton.isEnabled = true
                     it.captureButton.visibility = View.INVISIBLE
                     it.captureButton.isEnabled = false
 
@@ -471,7 +459,6 @@ class CaptureFragment : Fragment() {
                     it.stopButton.isEnabled = true
                 }
                 UiState.FINALIZED -> {
-                    //it.captureButton.setImageResource(R.drawable.ic_start)
                     it.captureButton.visibility = View.VISIBLE
                     it.captureButton.isEnabled = true
                     it.stopButton.visibility = View.INVISIBLE
@@ -495,9 +482,6 @@ class CaptureFragment : Fragment() {
         showUI(UiState.IDLE, reason)
 
         cameraIndex = 0
-        qualityIndex = DEFAULT_QUALITY_IDX
-        audioEnabled = true
-        //captureViewBinding.audioSelection.isChecked = audioEnabled
     }
 
     private fun getQualityFromString(qualityValue: String): Quality {
@@ -514,6 +498,5 @@ class CaptureFragment : Fragment() {
         // default Quality selection if no input from UI
         const val DEFAULT_QUALITY_IDX = 0
         val TAG: String = CaptureFragment::class.java.simpleName
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 }
