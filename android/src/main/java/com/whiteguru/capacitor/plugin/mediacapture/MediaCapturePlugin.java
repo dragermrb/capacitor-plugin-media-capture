@@ -137,7 +137,7 @@ public class MediaCapturePlugin extends Plugin {
     @NonNull
     private File createTempFile(String extension) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
-        String fileName = extension + "_" + timeStamp + "_";
+        String fileName = "VID_" + timeStamp + "_";
         File storageDir = getContext().getCacheDir();
 
         return File.createTempFile(fileName, "." + extension, storageDir);
