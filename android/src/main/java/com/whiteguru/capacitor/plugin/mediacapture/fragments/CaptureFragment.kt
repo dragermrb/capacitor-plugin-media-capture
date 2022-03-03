@@ -18,12 +18,16 @@ package com.whiteguru.capacitor.plugin.mediacapture.fragments
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.hardware.camera2.CaptureRequest
 import android.os.Bundle
 import android.provider.MediaStore.*
 import android.util.Log
+import android.util.Range
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.camera2.interop.Camera2Interop
+import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -150,11 +154,7 @@ class CaptureFragment : Fragment() {
             )
         }
 
-        val preview = Preview.Builder()
-            .setTargetAspectRatio(quality.getAspectRatio(quality))
-            .build().apply {
-                setSurfaceProvider(captureViewBinding.previewView.surfaceProvider)
-            }
+        val preview = makePreview(quality.getAspectRatio(quality));
 
         val recorder = Recorder.Builder()
             .setQualitySelector(qualitySelector)
@@ -178,6 +178,19 @@ class CaptureFragment : Fragment() {
         }
 
         enableUI(true)
+    }
+
+    @androidx.annotation.OptIn(ExperimentalCamera2Interop::class)
+    private fun makePreview(quality: Int): Preview {
+        val previewBuilder = Preview.Builder().setTargetAspectRatio(quality)
+
+        Camera2Interop.Extender(previewBuilder).setCaptureRequestOption(
+            CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, Range(30, 30)
+        )
+
+        return previewBuilder.build().apply {
+            setSurfaceProvider(captureViewBinding.previewView.surfaceProvider)
+        };
     }
 
     /**
