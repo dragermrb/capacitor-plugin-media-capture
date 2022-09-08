@@ -9,6 +9,13 @@ npm install @whiteguru/capacitor-plugin-media-capture
 npx cap sync
 ```
 
+### or for Capacitor 3.x
+
+```bash
+npm install @whiteguru/capacitor-plugin-media-capture@3.0.1
+npx cap sync
+```
+
 ## iOS
 
 iOS not available jet
@@ -32,8 +39,8 @@ This plugin needs `compileSdkVersion = 31` variable (defined in your app's `vari
 
 <docgen-index>
 
-- [`captureVideo(...)`](#capturevideo)
-- [Interfaces](#interfaces)
+* [`captureVideo(...)`](#capturevideo)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -43,32 +50,27 @@ This plugin needs `compileSdkVersion = 31` variable (defined in your app's `vari
 ### captureVideo(...)
 
 ```typescript
-captureVideo(options: CaptureVideoOptions) => any
+captureVideo(options: CaptureVideoOptions) => Promise<MediaFileResult>
 ```
 
 | Param         | Type                                                                |
 | ------------- | ------------------------------------------------------------------- |
 | **`options`** | <code><a href="#capturevideooptions">CaptureVideoOptions</a></code> |
 
-**Returns:** <code>any</code>
+**Returns:** <code>Promise&lt;<a href="#mediafileresult">MediaFileResult</a>&gt;</code>
 
----
+--------------------
+
 
 ### Interfaces
 
-#### CaptureVideoOptions
-
-| Prop            | Type                                        | Description                                                                                                                                                         |
-| --------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`duration`**  | <code>number</code>                         | Maximum duration per video clip.                                                                                                                                    |
-| **`quality`**   | <code>"uhd" \| "fhd" \| "hd" \| "sd"</code> | Quality of the video. `uhd` for 4K ultra HD video size (2160p). `fhd` for full HD video size (1080p). `hd` for HD video size (720p). `sd` for SD video size (480p). |
-| **`sizeLimit`** | <code>number</code>                         | Max file size in bytes.                                                                                                                                             |
 
 #### MediaFileResult
 
 | Prop       | Type                                            |
 | ---------- | ----------------------------------------------- |
 | **`file`** | <code><a href="#mediafile">MediaFile</a></code> |
+
 
 #### MediaFile
 
@@ -78,5 +80,14 @@ captureVideo(options: CaptureVideoOptions) => any
 | **`path`** | <code>string</code> | The full path of the file, including the name.  |
 | **`type`** | <code>string</code> | The file's mime type                            |
 | **`size`** | <code>number</code> | The size of the file, in bytes.                 |
+
+
+#### CaptureVideoOptions
+
+| Prop            | Type                                        | Description                                                                                                                                                         |
+| --------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`duration`**  | <code>number</code>                         | Maximum duration per video clip.                                                                                                                                    |
+| **`quality`**   | <code>'uhd' \| 'fhd' \| 'hd' \| 'sd'</code> | Quality of the video. `uhd` for 4K ultra HD video size (2160p). `fhd` for full HD video size (1080p). `hd` for HD video size (720p). `sd` for SD video size (480p). |
+| **`sizeLimit`** | <code>number</code>                         | Max file size in bytes.                                                                                                                                             |
 
 </docgen-api>
