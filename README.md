@@ -9,10 +9,10 @@ npm install @whiteguru/capacitor-plugin-media-capture
 npx cap sync
 ```
 
-### or for Capacitor 3.x
+### or for Capacitor 4.x
 
 ```bash
-npm install @whiteguru/capacitor-plugin-media-capture@3.0.1
+npm install @whiteguru/capacitor-plugin-media-capture@4.0.1
 npx cap sync
 ```
 
