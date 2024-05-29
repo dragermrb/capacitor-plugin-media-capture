@@ -2,17 +2,24 @@
 
 Capacitor plugin to capture audio and video
 
-## Install
+## Install (Capacitor 6.x)
 
 ```bash
 npm install @whiteguru/capacitor-plugin-media-capture
 npx cap sync
 ```
 
+## or for Capacitor 5.x
+
+```bash
+npm install @whiteguru/capacitor-plugin-media-capture@^5.0.1
+npx cap sync
+```
+
 ### or for Capacitor 4.x
 
 ```bash
-npm install @whiteguru/capacitor-plugin-media-capture@4.0.1
+npm install @whiteguru/capacitor-plugin-media-capture@^4.0.1
 npx cap sync
 ```
 
@@ -39,8 +46,8 @@ This plugin needs `compileSdkVersion = 31` variable (defined in your app's `vari
 
 <docgen-index>
 
-* [`captureVideo(...)`](#capturevideo)
-* [Interfaces](#interfaces)
+- [`captureVideo(...)`](#capturevideo)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -59,18 +66,15 @@ captureVideo(options: CaptureVideoOptions) => Promise<MediaFileResult>
 
 **Returns:** <code>Promise&lt;<a href="#mediafileresult">MediaFileResult</a>&gt;</code>
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### MediaFileResult
 
 | Prop       | Type                                            |
 | ---------- | ----------------------------------------------- |
 | **`file`** | <code><a href="#mediafile">MediaFile</a></code> |
-
 
 #### MediaFile
 
@@ -80,7 +84,6 @@ captureVideo(options: CaptureVideoOptions) => Promise<MediaFileResult>
 | **`path`** | <code>string</code> | The full path of the file, including the name.  |
 | **`type`** | <code>string</code> | The file's mime type                            |
 | **`size`** | <code>number</code> | The size of the file, in bytes.                 |
-
 
 #### CaptureVideoOptions
 
