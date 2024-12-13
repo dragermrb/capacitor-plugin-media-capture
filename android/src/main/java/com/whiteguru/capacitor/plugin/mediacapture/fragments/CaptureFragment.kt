@@ -21,6 +21,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.provider.MediaStore.*
 import android.util.Log
+import android.util.Range
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -152,6 +153,7 @@ class CaptureFragment : Fragment() {
 
         val preview = Preview.Builder()
             .setTargetAspectRatio(quality.getAspectRatio(quality))
+            .setTargetFrameRate(Range(30,30))
             .build().apply {
                 setSurfaceProvider(captureViewBinding.previewView.surfaceProvider)
             }
@@ -160,7 +162,9 @@ class CaptureFragment : Fragment() {
             .setQualitySelector(qualitySelector)
             .build()
 
-        videoCapture = VideoCapture.withOutput(recorder)
+        videoCapture = VideoCapture.Builder(recorder)
+            .setTargetFrameRate(Range(30,30))
+            .build()
 
         try {
             cameraProvider.unbindAll()

@@ -5,7 +5,7 @@ ext {
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.5.1'
 
     // CameraX dependencies (first release for video is: "1.1.0-alpha10")
-    androidxCameraxVersion= project.hasProperty('androidxCameraxVersion') ? rootProject.ext.androidxCameraxVersion : '1.1.0-beta01'
+    androidxCameraxVersion= project.hasProperty('androidxCameraxVersion') ? rootProject.ext.androidxCameraxVersion : '1.4.0'
 
     androidxNavVersion= project.hasProperty('androidxNavVersion') ? rootProject.ext.androidxNavVersion : '2.4.0-rc01'
 }
