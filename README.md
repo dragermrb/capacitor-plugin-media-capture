@@ -46,8 +46,8 @@ This plugin needs `compileSdkVersion = 31` variable (defined in your app's `vari
 
 <docgen-index>
 
-- [`captureVideo(...)`](#capturevideo)
-- [Interfaces](#interfaces)
+* [`captureVideo(...)`](#capturevideo)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -66,15 +66,18 @@ captureVideo(options: CaptureVideoOptions) => Promise<MediaFileResult>
 
 **Returns:** <code>Promise&lt;<a href="#mediafileresult">MediaFileResult</a>&gt;</code>
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### MediaFileResult
 
 | Prop       | Type                                            |
 | ---------- | ----------------------------------------------- |
 | **`file`** | <code><a href="#mediafile">MediaFile</a></code> |
+
 
 #### MediaFile
 
@@ -84,6 +87,7 @@ captureVideo(options: CaptureVideoOptions) => Promise<MediaFileResult>
 | **`path`** | <code>string</code> | The full path of the file, including the name.  |
 | **`type`** | <code>string</code> | The file's mime type                            |
 | **`size`** | <code>number</code> | The size of the file, in bytes.                 |
+
 
 #### CaptureVideoOptions
 
