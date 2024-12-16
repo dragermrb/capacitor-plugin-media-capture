@@ -14,6 +14,11 @@ export interface CaptureVideoOptions {
   quality?: 'uhd' | 'fhd' | 'hd' | 'sd';
 
   /**
+   * Framerate (default 30)
+   */
+  frameRate?: number;
+
+  /**
    * Max file size in bytes.
    */
   sizeLimit?: number;

@@ -19,6 +19,7 @@ import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
+import com.whiteguru.capacitor.plugin.mediacapture.fragments.CaptureFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class MediaCapturePlugin extends Plugin {
     public void captureVideo(PluginCall call) {
         int duration = call.getInt("duration", 0);
         String quality = call.getString("quality", "sd");
+        int frameRate = call.getInt("frameRate", 30);
         Long sizeLimit = Long.valueOf(call.getInt("sizeLimit", 0));
 
         if (checkCameraPermissions(call)) {
@@ -51,6 +53,7 @@ public class MediaCapturePlugin extends Plugin {
 
             intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, duration);
             intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, quality);
+            intent.putExtra(CaptureFragment.EXTRA_FRAME_RATE, frameRate);
             intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, sizeLimit);
 
             try {

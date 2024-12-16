@@ -95,6 +95,7 @@ captureVideo(options: CaptureVideoOptions) => Promise<MediaFileResult>
 | --------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`duration`**  | <code>number</code>                         | Maximum duration per video clip.                                                                                                                                    |
 | **`quality`**   | <code>'uhd' \| 'fhd' \| 'hd' \| 'sd'</code> | Quality of the video. `uhd` for 4K ultra HD video size (2160p). `fhd` for full HD video size (1080p). `hd` for HD video size (720p). `sd` for SD video size (480p). |
+| **`frameRate`** | <code>number</code>                         | Framerate (default 30)                                                                                                                                              |
 | **`sizeLimit`** | <code>number</code>                         | Max file size in bytes.                                                                                                                                             |
 
 </docgen-api>

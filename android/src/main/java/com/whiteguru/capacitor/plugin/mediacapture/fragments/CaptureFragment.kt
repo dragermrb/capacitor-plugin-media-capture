@@ -19,16 +19,27 @@ package com.whiteguru.capacitor.plugin.mediacapture.fragments
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
-import android.provider.MediaStore.*
+import android.provider.MediaStore.EXTRA_DURATION_LIMIT
+import android.provider.MediaStore.EXTRA_OUTPUT
+import android.provider.MediaStore.EXTRA_SIZE_LIMIT
+import android.provider.MediaStore.EXTRA_VIDEO_QUALITY
 import android.util.Log
 import android.util.Range
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.*
+import androidx.camera.video.FallbackStrategy
+import androidx.camera.video.FileOutputOptions
+import androidx.camera.video.Quality
+import androidx.camera.video.QualitySelector
+import androidx.camera.video.Recorder
+import androidx.camera.video.Recording
+import androidx.camera.video.VideoCapture
+import androidx.camera.video.VideoRecordEvent
 import androidx.concurrent.futures.await
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -55,6 +66,8 @@ class CaptureFragment : Fragment() {
     private var outputFile: File? = null
     private var limitInSeconds = 0
     private var quality: Quality = Quality.SD
+    private var resolution: Size = getResolutionFromQuality(Quality.SD)
+    private var frameRate: Int = 30
     private var sizeLimit = 0L
 
     // UI with ViewBinding
@@ -94,6 +107,8 @@ class CaptureFragment : Fragment() {
         val extras = requireActivity().intent.extras
         if (extras != null) {
             quality = getQualityFromString(extras.getString(EXTRA_VIDEO_QUALITY, "sd"))
+            resolution = getResolutionFromQuality(quality)
+            frameRate  = extras.getInt(EXTRA_FRAME_RATE, 30)
             limitInSeconds = extras.getInt(EXTRA_DURATION_LIMIT, 0)
             sizeLimit = extras.getLong(EXTRA_SIZE_LIMIT, 10L * 1024 * 1024)
 
@@ -122,6 +137,10 @@ class CaptureFragment : Fragment() {
     override fun onDestroyView() {
         _captureViewBinding = null
         super.onDestroyView()
+    }
+
+    private fun estimateVideoBitRate(width: Int, height: Int, frameRate: Int): Long {
+        return (0.07f * 2 * width * height * frameRate).toLong()
     }
 
     /**
@@ -153,13 +172,18 @@ class CaptureFragment : Fragment() {
 
         val preview = Preview.Builder()
             .setTargetAspectRatio(quality.getAspectRatio(quality))
-            .setTargetFrameRate(Range(30,30))
+            .setTargetFrameRate(Range(frameRate,frameRate))
             .build().apply {
                 setSurfaceProvider(captureViewBinding.previewView.surfaceProvider)
             }
 
         val recorder = Recorder.Builder()
             .setQualitySelector(qualitySelector)
+            .setTargetVideoEncodingBitRate(estimateVideoBitRate(
+              resolution.width,
+              resolution.height,
+              frameRate).toInt()
+            )
             .build()
 
         videoCapture = VideoCapture.Builder(recorder)
@@ -498,9 +522,20 @@ class CaptureFragment : Fragment() {
         }
     }
 
+    private fun getResolutionFromQuality(qualityValue: Quality): Size {
+        return when (qualityValue) {
+            Quality.UHD -> Size(3840, 2160)
+            Quality.FHD -> Size(1920, 1080)
+            Quality.HD -> Size(1280,720)
+            Quality.SD -> Size(720, 480)
+            else -> Size(720, 480)
+        }
+    }
+
     companion object {
         // default Quality selection if no input from UI
         const val DEFAULT_QUALITY_IDX = 0
         val TAG: String = CaptureFragment::class.java.simpleName
+        const val EXTRA_FRAME_RATE: String = "android.intent.extra.frameRate"
     }
 }
