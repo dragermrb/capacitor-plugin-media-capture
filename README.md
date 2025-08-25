@@ -2,10 +2,17 @@
 
 Capacitor plugin to capture audio and video
 
-## Install (Capacitor 6.x)
+## Install (Capacitor 7.x)
 
 ```bash
 npm install @whiteguru/capacitor-plugin-media-capture
+npx cap sync
+```
+
+## Install (Capacitor 6.x)
+
+```bash
+npm install @whiteguru/capacitor-plugin-media-capture@^6.0.1
 npx cap sync
 ```
 
